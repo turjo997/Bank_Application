@@ -149,6 +149,17 @@ public class Main {
 
     private void displayAllAccounts() {
 
+        if (accounts.isEmpty()) {
+            System.out.println("No accounts found.");
+        } else {
+            System.out.println("All accounts:");
+            for (Account account : accounts) {
+                System.out.println("Name: " + account.getName() + ", Number: " + account.getPhoneNumber() +
+                        ", Account Number: " + account.getAccountNumber() +
+                        ", Address: " +account.getAddress() +
+                        ", Creation Date: " + account.getCreationDate() + ", Balance: " + account.getBalance());
+            }
+        }
     }
 
     private void createAccount() {
@@ -160,12 +171,24 @@ public class Main {
             System.out.println("Enter Account Name:");
             String name = scanner.nextLine();
 
+            for (Account existingAccount : accounts) {
+                if (existingAccount.getName().equals(name)) {
+                    throw new IllegalArgumentException("An account with the same name already exists.");
+                }
+            }
+
             if (!isValidName(name)) {
                 throw new IllegalArgumentException("Invalid account name. Account name should contain only letters and spaces, and should not exceed 40 characters.");
             }
 
             System.out.println("Enter Account Number:");
             String accNumber = scanner.nextLine();
+
+            for (Account existingAccount : accounts) {
+                if (existingAccount.getAccountNumber().equals(accNumber)) {
+                    throw new IllegalArgumentException("An account with the same account number already exists.");
+                }
+            }
 
             if (!isValidNumber(accNumber)) {
                 throw new IllegalArgumentException("Invalid account number. Account number should contain only digits.");

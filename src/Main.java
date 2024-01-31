@@ -125,10 +125,6 @@ public class Main {
             }
         } while (choice != 8);
 
-
-
-
-
     }
 
     private void deleteAccount() {
@@ -157,12 +153,79 @@ public class Main {
 
     private void createAccount() {
 
+        scanner.nextLine();
+
+        try {
+
+            System.out.println("Enter Account Name:");
+            String name = scanner.nextLine();
+
+            if (!isValidName(name)) {
+                throw new IllegalArgumentException("Invalid account name. Account name should contain only letters and spaces, and should not exceed 40 characters.");
+            }
+
+            System.out.println("Enter Account Number:");
+            String accNumber = scanner.nextLine();
+
+            if (!isValidNumber(accNumber)) {
+                throw new IllegalArgumentException("Invalid account number. Account number should contain only digits.");
+            }
+
+            System.out.println("Enter creation date(YYYY-MM-DD):");
+            String creationDate = scanner.nextLine();
+
+            if (!isValidDate(creationDate)) {
+                throw new IllegalArgumentException("Invalid creation date format. Please use YYYY-MM-DD.");
+            }
+
+            System.out.println("Enter address:");
+            String address = scanner.nextLine();
+
+
+            System.out.println("Enter phone number:");
+            String phnNumber = scanner.nextLine();
+
+            if(!isValidPhoneNumber(phnNumber)){
+                throw new IllegalArgumentException("Invalid phone number. Phone number must be contain 11 characters starting with 0.");
+            }
+
+            System.out.println("Enter initial balance:");
+            double balance = scanner.nextDouble();
+
+            if (balance < 5000) {
+                throw new IllegalArgumentException("Invalid initial balance. For creating an account minimum 5000 taka needs to be inserted.");
+            }
+
+            Account account = new Account(name, accNumber, creationDate, balance , address , phnNumber);
+            accounts.add(account);
+            System.out.println("Account created successfully.");
+
+        }catch (IllegalArgumentException e) {
+            System.out.println("Error creating account: " + e.getMessage());
+        }
+
+    }
+
+    private boolean isValidPhoneNumber(String phnNumber) {
+        return phnNumber.matches("0\\d{10}");
+    }
+
+    private boolean isValidDate(String creationDate) {
+        String regex = "^(?:19|20)\\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])$";
+        return creationDate.matches(regex);
+    }
+
+    private boolean isValidNumber(String accNumber) {
+        return accNumber.matches("\\d+");
+    }
+
+    private boolean isValidName(String name) {
+        return name.matches("[a-zA-Z\\s]+") && name.length() <= 40;
     }
 
 
     public static void main(String[] args) {
         Main app = new Main();
-
         app.startApp();
 
     }

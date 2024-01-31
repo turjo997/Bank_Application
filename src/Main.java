@@ -7,9 +7,7 @@ class Account{
     private String accountNumber;
     private String creationDate;
     private double balance;
-
     private String address;
-
     private String phoneNumber;
 
     public Account(String name, String accountNumber, String creationDate, double balance, String address, String phoneNumber) {
@@ -128,6 +126,21 @@ public class Main {
     }
 
     private void deleteAccount() {
+        scanner.nextLine();
+        System.out.println("Enter account number to delete:");
+        String number = scanner.nextLine();
+        boolean removed = false;
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(number)) {
+                accounts.remove(account);
+                System.out.println("Account deleted successfully.");
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) {
+            System.out.println("Account not found.");
+        }
 
     }
 
@@ -144,6 +157,54 @@ public class Main {
     }
 
     private void updateAccount() {
+
+        scanner.nextLine();
+        System.out.println("Enter account number to update:");
+        String number = scanner.nextLine();
+        boolean found = false;
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(number)) {
+                System.out.println("Enter new account name:");
+                String newName = scanner.nextLine();
+
+                if (!isValidName(newName)) {
+                    throw new IllegalArgumentException("Invalid account name. Account name should contain only letters and spaces, and should not exceed 40 characters.");
+                }
+
+                account.setName(newName);
+
+                System.out.println("Enter new creation date:");
+                String newCreationDate = scanner.nextLine();
+
+                if (!isValidDate(newCreationDate)) {
+                    throw new IllegalArgumentException("Invalid creation date format. Please use YYYY-MM-DD.");
+                }
+
+                account.setCreationDate(newCreationDate);
+
+                System.out.println("Enter address:");
+                String newAddress = scanner.nextLine();
+
+                account.setAddress(newAddress);
+
+
+                System.out.println("Enter phone number:");
+                String newphnNumber = scanner.nextLine();
+
+                if(!isValidPhoneNumber(newphnNumber)){
+                    throw new IllegalArgumentException("Invalid phone number. Phone number must be contain 11 characters starting with 0.");
+                }
+
+                account.setPhoneNumber(newphnNumber);
+
+                System.out.println("Account updated successfully.");
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Account not found.");
+        }
 
     }
 

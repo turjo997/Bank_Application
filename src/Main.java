@@ -145,59 +145,80 @@ public class Main {
     }
 
     private void depositAmount() {
+        scanner.nextLine();
+        System.out.println("Enter account number to deposit into:");
+        String number = scanner.nextLine();
 
+        boolean found = false;
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(number)) {
+                double amount;
+                do {
+                    System.out.println("Enter amount to deposit (minimum 1000):");
+                    amount = scanner.nextDouble();
+                    if (amount < 1000) {
+                        System.out.println("Invalid deposit amount. Minimum deposit amount is 1000.");
+                    }
+                } while (amount < 1000);
+
+                account.setBalance(account.getBalance() + amount);
+                System.out.println("Amount deposited successfully.");
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Account not found.");
+        }
     }
 
     private void withdrawAmount() {
+        scanner.nextLine();
+        System.out.println("Enter account number to withdraw from:");
+        String number = scanner.nextLine();
 
+        boolean found = false;
+        do {
+            System.out.println("Enter amount to withdraw:");
+            double amount = scanner.nextDouble();
+
+            if (amount <= 0) {
+                System.out.println("Invalid amount. Please enter a positive value.");
+            } else {
+                for (Account account : accounts) {
+                    if (account.getAccountNumber().equals(number)) {
+                        if (account.getBalance() - amount >= 1000) {
+                            account.setBalance(account.getBalance() - amount);
+                            System.out.println("Amount withdrawn successfully.");
+                        } else {
+                            System.out.println("Insufficient funds. Minimum balance of 1000 taka must be maintained.");
+                        }
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    System.out.println("Account not found.");
+                } else {
+                    break;
+                }
+            }
+        } while (true);
     }
 
     private void searchAccount() {
-
-    }
-
-    private void updateAccount() {
-
         scanner.nextLine();
-        System.out.println("Enter account number to update:");
+        System.out.println("Enter account number to search:");
         String number = scanner.nextLine();
         boolean found = false;
         for (Account account : accounts) {
             if (account.getAccountNumber().equals(number)) {
-                System.out.println("Enter new account name:");
-                String newName = scanner.nextLine();
-
-                if (!isValidName(newName)) {
-                    throw new IllegalArgumentException("Invalid account name. Account name should contain only letters and spaces, and should not exceed 40 characters.");
-                }
-
-                account.setName(newName);
-
-                System.out.println("Enter new creation date:");
-                String newCreationDate = scanner.nextLine();
-
-                if (!isValidDate(newCreationDate)) {
-                    throw new IllegalArgumentException("Invalid creation date format. Please use YYYY-MM-DD.");
-                }
-
-                account.setCreationDate(newCreationDate);
-
-                System.out.println("Enter address:");
-                String newAddress = scanner.nextLine();
-
-                account.setAddress(newAddress);
-
-
-                System.out.println("Enter phone number:");
-                String newphnNumber = scanner.nextLine();
-
-                if(!isValidPhoneNumber(newphnNumber)){
-                    throw new IllegalArgumentException("Invalid phone number. Phone number must be contain 11 characters starting with 0.");
-                }
-
-                account.setPhoneNumber(newphnNumber);
-
-                System.out.println("Account updated successfully.");
+                System.out.println("Account found:");
+                System.out.println("Name: " + account.getName() + ", Number: " + account.getPhoneNumber() +
+                        ", Account Number: " + account.getAccountNumber() +
+                        ", Address: " +account.getAddress() +
+                        ", Creation Date: " + account.getCreationDate() + ", Balance: " + account.getBalance());
                 found = true;
                 break;
             }
@@ -205,7 +226,63 @@ public class Main {
         if (!found) {
             System.out.println("Account not found.");
         }
+    }
 
+    private void updateAccount() {
+        scanner.nextLine();
+
+        boolean found = false;
+        do {
+            System.out.println("Enter account number to update:");
+            String number = scanner.nextLine();
+
+            for (Account account : accounts) {
+                if (account.getAccountNumber().equals(number)) {
+                    try {
+                        System.out.println("Enter new account name:");
+                        String newName = scanner.nextLine();
+
+                        if (!isValidName(newName)) {
+                            throw new IllegalArgumentException("Invalid account name. Account name should contain only letters and spaces, and should not exceed 40 characters.");
+                        }
+
+                        System.out.println("Enter new creation date(YYYY-MM-DD):");
+                        String newCreationDate = scanner.nextLine();
+
+                        if (!isValidDate(newCreationDate)) {
+                            throw new IllegalArgumentException("Invalid creation date format. Please use YYYY-MM-DD.");
+                        }
+
+                        System.out.println("Enter address:");
+                        String newAddress = scanner.nextLine();
+
+                        System.out.println("Enter phone number:");
+                        String newPhnNumber = scanner.nextLine();
+
+                        if (!isValidPhoneNumber(newPhnNumber)) {
+                            throw new IllegalArgumentException("Invalid phone number. Phone number must contain 11 characters starting with 0.");
+                        }
+
+                        account.setName(newName);
+                        account.setCreationDate(newCreationDate);
+                        account.setAddress(newAddress);
+                        account.setPhoneNumber(newPhnNumber);
+
+                        System.out.println("Account updated successfully.");
+                        found = true;
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error updating account: " + e.getMessage());
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                System.out.println("Account not found.");
+            } else {
+                break;
+            }
+        } while (true);
     }
 
     private void displayAllAccounts() {
